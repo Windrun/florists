@@ -2,6 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import { Flower } from '../types';
 import FlowerComponent from './Flower';
 import { useNotifications } from '../hooks/useNotifications';
+import { DEFAULT_FLOWERS, PREMIUM_FLOWERS, FLOWER_CONFIGS } from '../utils/flowerConfigs';
+
+const formatGrowthTime = (seconds: number): string => {
+  const hours = Math.floor(seconds / 3600);
+  if (hours > 0) return `${hours}ч`;
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}м`;
+};
 
 interface GardenProps {
   flowers: Flower[];
@@ -25,9 +33,8 @@ const Garden = ({ flowers, userId, onPlant, onHarvest, onHelp, onFlowerReady, on
   const availableSlots = 6 - activeFlowers.length;
 
   const flowerTypes = [
-    { type: 'daisy', name: 'Ромашка', time: '1ч', emoji: '🌼', reward: 10 },
-    { type: 'rose', name: 'Роза', time: '2ч', emoji: '🌹', reward: 15 },
-    { type: 'tulip', name: 'Тюльпан', time: '3ч', emoji: '🌷', reward: 20 },
+    ...DEFAULT_FLOWERS,
+    ...PREMIUM_FLOWERS,
   ];
 
   useEffect(() => {
@@ -48,7 +55,8 @@ const Garden = ({ flowers, userId, onPlant, onHarvest, onHelp, onFlowerReady, on
       const now = Date.now();
       activeFlowers.forEach(flower => {
         if (!notifiedFlowersRef.current.has(flower.id)) {
-          const growthTime = flower.type === 'daisy' ? 3600 : flower.type === 'rose' ? 7200 : 10800;
+          const config = FLOWER_CONFIGS[flower.type];
+          const growthTime = config?.growthTime || 3600;
           const elapsed = (now - flower.plantedAt) / 1000;
           
           if (elapsed >= growthTime) {
@@ -113,8 +121,9 @@ const Garden = ({ flowers, userId, onPlant, onHarvest, onHelp, onFlowerReady, on
               >
                 <div className="text-4xl mb-1">{flower.emoji}</div>
                 <div className="font-medium text-sm dark:text-gray-200">{flower.name}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">{flower.time}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">{formatGrowthTime(flower.growthTime)}</div>
                 <div className="text-xs text-green-600 dark:text-green-400 font-medium">+{flower.reward}🪙</div>
+                {flower.isPremium && <div className="text-xs text-purple-500">💎</div>}
               </button>
             ))}
           </div>

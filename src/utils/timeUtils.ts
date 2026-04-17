@@ -2,6 +2,9 @@ const GROWTH_TIMES: Record<string, number> = {
   daisy: 3600,
   rose: 7200,
   tulip: 10800,
+  sunflower: 14400,
+  orchid: 21600,
+  gift_rose: 7200,
 };
 
 export const getGrowthTime = (flowerType: string): number => {

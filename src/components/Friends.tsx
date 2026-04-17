@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { User, Flower } from '../types';
 import { useFriends } from '../hooks/useFriends';
 import { useFlowerTimer } from '../hooks/useFlowerTimer';
+import { getFlowerEmoji, getFlowerName } from '../utils/flowerConfigs';
 
 interface FriendsProps {
   currentUser: User | null;
@@ -10,15 +11,6 @@ interface FriendsProps {
 
 const FriendGarden = ({ friend, onHelp, currentUserId }: { friend: User; onHelp: (flowerId: string, ownerId: string) => void; currentUserId: string }) => {
   const activeFlowers = friend.flowers.filter(f => !f.harvestedAt);
-  
-  const getFlowerEmoji = (type: string) => {
-    switch (type) {
-      case 'daisy': return '🌼';
-      case 'rose': return '🌹';
-      case 'tulip': return '🌷';
-      default: return '🌸';
-    }
-  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border dark:border-gray-700">
@@ -67,15 +59,6 @@ const FriendFlowerItem = ({
   const { isReady, formattedTime } = useFlowerTimer(flower.plantedAt, flower.type);
   const hasHelped = flower.helperIds.includes(currentUserId);
   const [isWatering, setIsWatering] = useState(false);
-
-  const getFlowerEmoji = (type: string) => {
-    switch (type) {
-      case 'daisy': return '🌼';
-      case 'rose': return '🌹';
-      case 'tulip': return '🌷';
-      default: return '🌸';
-    }
-  };
 
   const handleHelp = () => {
     setIsWatering(true);

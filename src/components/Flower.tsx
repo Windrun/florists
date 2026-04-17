@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Flower } from '../types';
 import { useFlowerTimer } from '../hooks/useFlowerTimer';
+import { FLOWER_CONFIGS, getFlowerEmoji, getFlowerName } from '../utils/flowerConfigs';
 
 interface FlowerComponentProps {
   flower: Flower;
@@ -40,31 +41,8 @@ const FlowerComponent = ({
     }
   }, [isReady, isHarvested]);
 
-  const getFlowerEmoji = (type: string) => {
-    switch (type) {
-      case 'daisy':
-        return '🌼';
-      case 'rose':
-        return '🌹';
-      case 'tulip':
-        return '🌷';
-      default:
-        return '🌸';
-    }
-  };
-
-  const getFlowerName = (type: string) => {
-    switch (type) {
-      case 'daisy':
-        return 'Ромашка';
-      case 'rose':
-        return 'Роза';
-      case 'tulip':
-        return 'Тюльпан';
-      default:
-        return 'Цветок';
-    }
-  };
+  const flowerEmoji = getFlowerEmoji(flower.type);
+  const flowerName = getFlowerName(flower.type);
 
   const handleHarvest = () => {
     setIsHarvesting(true);
@@ -97,8 +75,8 @@ const FlowerComponent = ({
       )}
 
       <div className={`${isHarvesting ? 'animate-harvest' : ''} ${justGrew ? 'animate-ready-bounce' : ''}`}>
-        <div className="text-5xl mb-2">{getFlowerEmoji(flower.type)}</div>
-        <div className="font-medium text-gray-800 dark:text-gray-200">{getFlowerName(flower.type)}</div>
+        <div className="text-5xl mb-2">{flowerEmoji}</div>
+        <div className="font-medium text-gray-800 dark:text-gray-200">{flowerName}</div>
       </div>
 
       {flower.potSkin !== 'default' && (

@@ -1,13 +1,14 @@
 import { db } from '../firebase/config';
 import { doc, updateDoc, arrayUnion, runTransaction } from 'firebase/firestore';
-import { Flower } from '../types';
-import { isFlowerReady, getFlowerReward } from '../utils/timeUtils';
+import { Flower, FlowerType } from '../types';
+import { isFlowerReady, getFlowerReward as getRewardFromTime } from '../utils/timeUtils';
+import { getFlowerReward } from '../utils/flowerConfigs';
 
 export const plantFlower = async (userId: string, flowerType: string, potSkin: string = 'default') => {
   const userRef = doc(db, 'users', userId);
   const newFlower: Flower = {
     id: `${Date.now()}_${Math.random()}`,
-    type: flowerType as 'daisy' | 'rose' | 'tulip',
+    type: flowerType as FlowerType,
     plantedAt: Date.now(),
     harvestedAt: null,
     helperIds: [],
@@ -45,7 +46,7 @@ export const harvestFlower = async (userId: string, flowerId: string) => {
 
     flowers[flowerIndex] = { ...flower, harvestedAt: Date.now() };
 
-    const reward = getFlowerReward(flower.type);
+    const reward = getFlowerReward(flower.type as FlowerType);
     const newCoins = (userData.coins || 0) + reward;
 
     transaction.update(userRef, {

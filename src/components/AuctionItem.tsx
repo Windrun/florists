@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AuctionListing } from '../types';
 import { formatTime } from '../utils/timeUtils';
+import { getFlowerEmoji, getFlowerName } from '../utils/flowerConfigs';
 
 interface AuctionItemProps {
   listing: AuctionListing;
@@ -22,24 +23,6 @@ const AuctionItem = ({ listing, currentUserId, onBuy }: AuctionItemProps) => {
     const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
   }, [listing.expiresAt]);
-
-  const getFlowerEmoji = (type: string) => {
-    switch (type) {
-      case 'daisy': return '🌼';
-      case 'rose': return '🌹';
-      case 'tulip': return '🌷';
-      default: return '🌸';
-    }
-  };
-
-  const getFlowerName = (type: string) => {
-    switch (type) {
-      case 'daisy': return 'Ромашка';
-      case 'rose': return 'Роза';
-      case 'tulip': return 'Тюльпан';
-      default: return 'Цветок';
-    }
-  };
 
   const isExpired = timeLeft <= 0;
 

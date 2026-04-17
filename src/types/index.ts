@@ -1,4 +1,15 @@
-export type FlowerType = 'daisy' | 'rose' | 'tulip';
+export type FlowerType = 'daisy' | 'rose' | 'tulip' | 'sunflower' | 'orchid' | 'gift_rose';
+
+export interface FlowerConfig {
+  type: FlowerType;
+  name: string;
+  growthTime: number;
+  reward: number;
+  emoji: string;
+  description: string;
+  isPremium?: boolean;
+  canGift?: boolean;
+}
 
 export interface Flower {
   id: string;

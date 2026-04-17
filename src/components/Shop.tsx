@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { User, ShopItem } from '../types';
 import { db } from '../firebase/config';
 import { collection, getDocs, doc, runTransaction } from 'firebase/firestore';
+import { getFlowerEmoji, getFlowerName, getFlowerReward } from '../utils/flowerConfigs';
 
 interface ShopProps {
   userData: User | null;
@@ -172,17 +173,13 @@ const Shop = ({ userData, onRefresh }: ShopProps) => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {seeds.map((item) => {
             const owned = isOwned(item);
-            const flowerEmoji: Record<string, string> = {
-              daisy: '🌼',
-              rose: '🌹',
-              tulip: '🌷',
-            };
+            const flowerType = item.data.flowerType as keyof typeof import('../utils/flowerConfigs').FLOWER_CONFIGS;
             return (
               <div key={item.id} className="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow-sm text-center dark:border-gray-700">
-                <div className="text-3xl mb-2">{flowerEmoji[item.data.flowerType as string] || '🌸'}</div>
+                <div className="text-3xl mb-2">{getFlowerEmoji(flowerType)}</div>
                 <div className="font-medium dark:text-gray-200">{item.name}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  {item.data.growthTime === 3600 ? '1 час' : item.data.growthTime === 7200 ? '2 часа' : '3 часа'}
+                  {item.data.growthTime === 3600 ? '1 час' : item.data.growthTime === 7200 ? '2 часа' : item.data.growthTime === 14400 ? '4 часа' : item.data.growthTime === 21600 ? '6 часов' : '3 часа'}
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
                   {item.priceCoins ? `${item.priceCoins} 🪙` : `${item.priceGems} 💎`}

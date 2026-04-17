@@ -3,6 +3,7 @@ import { User, AuctionListing } from '../types';
 import { db } from '../firebase/config';
 import { collection, query, where, orderBy, getDocs, addDoc, updateDoc, doc, runTransaction } from 'firebase/firestore';
 import AuctionItem from './AuctionItem';
+import { getFlowerEmoji, getFlowerName } from '../utils/flowerConfigs';
 
 interface AuctionProps {
   userData: User | null;
@@ -185,9 +186,7 @@ const Auction = ({ userData, onRefresh }: AuctionProps) => {
               <option value="">Выберите цветок</option>
               {harvestableFlowers.map((flower) => (
                 <option key={flower.id} value={flower.id}>
-                  {flower.type === 'daisy' && '🌼 Ромашка'}
-                  {flower.type === 'rose' && '🌹 Роза'}
-                  {flower.type === 'tulip' && '🌷 Тюльпан'}
+                  {getFlowerEmoji(flower.type)} {getFlowerName(flower.type)}
                 </option>
               ))}
             </select>
