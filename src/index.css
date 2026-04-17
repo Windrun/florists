@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gradient-to-b from-green-50 to-white min-h-screen;
+}
+
+/* Посадка цветка */
+@keyframes plantPop {
+  0% {
+    transform: scale(0) translateY(20px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) translateY(-5px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-plant {
+  animation: plantPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Пульсация растущего цветка */
+@keyframes pulse-grow {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-grow {
+  animation: pulse-grow 2s ease-in-out infinite;
+}
+
+/* Готов к сбору - золотое свечение */
+@keyframes ready-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(234, 179, 8, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(234, 179, 8, 0.8), 0 0 30px rgba(234, 179, 8, 0.4);
+  }
+}
+
+.animate-ready {
+  animation: ready-glow 1.5s ease-in-out infinite;
+}
+
+/* Bounce готового цветка */
+@keyframes ready-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-ready-bounce {
+  animation: ready-bounce 1s ease-in-out infinite;
+}
+
+/* Сбор урожая - взлёт */
+@keyframes harvest-fly {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5) translateY(-50px);
+    opacity: 0;
+  }
+}
+
+.animate-harvest {
+  animation: harvest-fly 0.4s ease-out forwards;
+}
+
+/* Монеты при сборе */
+@keyframes coin-fly {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-30px) translateX(20px) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-coin {
+  animation: coin-fly 0.6s ease-out forwards;
+}
+
+/* Капли воды при помощи */
+@keyframes water-drop {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5) translateY(20px);
+    opacity: 0;
+  }
+}
+
+.animate-water {
+  animation: water-drop 0.5s ease-out forwards;
+}
+
+/* Toast уведомления */
+@keyframes toast-in {
+  0% {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-out {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.3s ease-out;
+}
+
+.animate-toast-out {
+  animation: toast-out 0.3s ease-out forwards;
+}
+
+/* XP награда */
+@keyframes xp-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-xp {
+  animation: xp-pop 0.5s ease-out;
+}
+
+/* Shimmer эффект */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Кнопка при нажатии */
+@keyframes button-press {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-press {
+  animation: button-press 0.1s ease-out;
+}
