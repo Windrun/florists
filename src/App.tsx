@@ -15,6 +15,7 @@ import FlowerCollection from './components/FlowerCollection';
 import ProfileSettings from './components/ProfileSettings';
 import Achievements from './components/Achievements';
 import Collections from './components/Collections';
+import Premium from './components/Premium';
 import { NotificationProvider, useNotifications } from './hooks/useNotifications';
 import { plantFlower, harvestFlower, helpFlower } from './services/flowerService';
 import { addBattlePassExp } from './services/userService';
@@ -199,6 +200,10 @@ function AppContent() {
             <Route
               path="battlepass"
               element={<BattlePass userData={userData} onRefresh={refreshUserData} />}
+            />
+            <Route
+              path="premium"
+              element={<Premium user={userData} />}
             />
             <Route
               path="friends"

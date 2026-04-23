@@ -86,6 +86,18 @@ const Layout = ({ userData }: LayoutProps) => {
               📜 Пропуск
             </NavLink>
             <NavLink
+              to="/premium"
+              className={({ isActive }) =>
+                `py-3 px-2 font-medium transition-colors ${
+                  isActive
+                    ? 'text-green-600 dark:text-green-400 border-b-2 border-green-600 dark:border-green-400'
+                    : 'text-gray-500 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
+                }`
+              }
+            >
+              👑 Премиум
+            </NavLink>
+            <NavLink
               to="/friends"
               className={({ isActive }) =>
                 `py-3 px-2 font-medium transition-colors ${
