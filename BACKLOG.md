@@ -38,3 +38,6 @@
 - [x] Достижения (18 achievements с XP)
 - [x] Коллекции и наборы (горшки, цветы)
 - [x] Dark mode toggle в профиле
+- [x] Тесты (vitest, unit tests)
+- [x] CI/CD (GitHub Actions)
+- [x] Премиум подписка (3 плана)
