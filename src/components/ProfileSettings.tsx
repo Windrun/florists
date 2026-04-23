@@ -13,6 +13,13 @@ const AVATAR_OPTIONS = ['🌸', '🌺', '🌻', '🌹', '🌷', '🌱', '🍀', 
 const ProfileSettings = ({ user, onRefresh }: ProfileSettingsProps) => {
   const [displayName, setDisplayName] = useState(user.displayName || '');
   const [selectedAvatar, setSelectedAvatar] = useState(user.photoURL || '🌸');
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('darkMode') === 'true' || 
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -20,6 +27,19 @@ const ProfileSettings = ({ user, onRefresh }: ProfileSettingsProps) => {
     setDisplayName(user.displayName || '');
     setSelectedAvatar(user.photoURL || '🌸');
   }, [user]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('darkMode', String(darkMode));
+  }, [darkMode]);
+
+  const handleDarkModeToggle = () => {
+    setDarkMode(!darkMode);
+  };
 
   const handleSave = async () => {
     if (!displayName.trim()) {
@@ -95,6 +115,25 @@ const ProfileSettings = ({ user, onRefresh }: ProfileSettingsProps) => {
               {avatar}
             </button>
           ))}
+        </div>
+      </div>
+
+      <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">{darkMode ? '🌙' : '☀️'}</span>
+            <span className="font-medium dark:text-gray-200">Тёмная тема</span>
+          </div>
+          <button
+            onClick={handleDarkModeToggle}
+            className={`w-12 h-6 rounded-full transition-colors ${
+              darkMode ? 'bg-green-500' : 'bg-gray-300'
+            }`}
+          >
+            <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
+              darkMode ? 'translate-x-6' : 'translate-x-0.5'
+            }`} />
+          </button>
         </div>
       </div>
 
