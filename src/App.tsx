@@ -13,6 +13,7 @@ import DailyTasks from './components/DailyTasks';
 import Leaderboard from './components/Leaderboard';
 import FlowerCollection from './components/FlowerCollection';
 import ProfileSettings from './components/ProfileSettings';
+import Achievements from './components/Achievements';
 import { NotificationProvider, useNotifications } from './hooks/useNotifications';
 import { plantFlower, harvestFlower, helpFlower } from './services/flowerService';
 import { addBattlePassExp } from './services/userService';
@@ -171,6 +172,7 @@ function AppContent() {
                   <DailyTasks user={userData} onRefresh={refreshUserData} />
                   <Leaderboard />
                   <FlowerCollection user={userData} />
+                  <Achievements user={userData} />
                   <Garden
                     flowers={userData?.flowers || []}
                     userId={user?.uid || ''}

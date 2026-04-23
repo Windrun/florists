@@ -2,8 +2,8 @@ import { db } from '../firebase/config';
 import { doc, updateDoc, arrayUnion, runTransaction, increment, getDoc } from 'firebase/firestore';
 import { Flower, FlowerType } from '../types';
 import { isFlowerReady, getFlowerReward as getRewardFromTime } from '../utils/timeUtils';
-import { getFlowerReward, ENERGY_CONFIG, calculateEnergy } from '../utils/flowerConfigs';
-import { updateEnergyAfterPlant, updateEnergyAfterHelp } from '../utils/energyUtils';
+import { getFlowerReward } from '../utils/flowerConfigs';
+import { ENERGY_CONFIG, calculateEnergy } from '../utils/energyUtils';
 
 export const plantFlower = async (userId: string, flowerType: string, potSkin: string = 'default') => {
   const userRef = doc(db, 'users', userId);
