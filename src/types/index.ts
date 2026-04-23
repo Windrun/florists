@@ -70,6 +70,8 @@ export interface User {
   totalPlants: number;
   totalHarvests: number;
   totalHelps: number;
+  isPremium: boolean;
+  premiumExpiresAt: number | null;
 }
 
 export interface AuctionListing {

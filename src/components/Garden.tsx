@@ -18,7 +18,7 @@ interface GardenProps {
   userData?: User | null;
   onPlant: (type: string) => void;
   onHarvest: (flowerId: string) => void;
-  onHelp: (flowerId: string) => void;
+  onHelp: (flowerId: string, ownerId: string) => void;
   onFlowerReady?: () => void;
   onSpeedUp?: (flowerId: string) => void;
 }

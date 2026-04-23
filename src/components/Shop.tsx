@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { User, ShopItem } from '../types';
 import { db } from '../firebase/config';
 import { collection, getDocs, doc, runTransaction } from 'firebase/firestore';
-import { getFlowerEmoji, getFlowerName, getFlowerReward } from '../utils/flowerConfigs';
+import { getFlowerEmoji, getFlowerName, getFlowerReward, FLOWER_CONFIGS } from '../utils/flowerConfigs';
+import { FlowerType } from '../types';
 
 interface ShopProps {
   userData: User | null;
@@ -115,7 +116,7 @@ const Shop = ({ userData, onRefresh }: ShopProps) => {
           {gemPacks.map((item) => (
             <div key={item.id} className="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700">
               <div className="text-2xl text-center mb-2">💎</div>
-              <div className="text-center font-bold text-lg dark:text-gray-200">{item.data.amount} алмазов</div>
+              <div className="text-center font-bold text-lg dark:text-gray-200">{String(item.data.amount)} алмазов</div>
               <div className="text-center text-sm text-gray-500 dark:text-gray-400 mb-3">
                 {item.priceGems === 0 ? 'Бесплатно' : `${item.priceGems} 💎`}
               </div>
@@ -173,7 +174,7 @@ const Shop = ({ userData, onRefresh }: ShopProps) => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {seeds.map((item) => {
             const owned = isOwned(item);
-            const flowerType = item.data.flowerType as keyof typeof import('../utils/flowerConfigs').FLOWER_CONFIGS;
+            const flowerType = item.data.flowerType as FlowerType;
             return (
               <div key={item.id} className="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow-sm text-center dark:border-gray-700">
                 <div className="text-3xl mb-2">{getFlowerEmoji(flowerType)}</div>

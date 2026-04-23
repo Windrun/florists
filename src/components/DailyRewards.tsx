@@ -4,7 +4,7 @@ import { getDailyRewardStatus, claimDailyReward } from '../services/userService'
 import { useToast } from '../App';
 
 interface DailyRewardsProps {
-  user: User;
+  user: User | null;
   onRefresh: () => void;
 }
 

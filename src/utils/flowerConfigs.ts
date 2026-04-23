@@ -1,4 +1,4 @@
-import { FlowerConfig } from '../types';
+import { FlowerConfig, FlowerType } from '../types';
 
 export const FLOWER_CONFIGS: Record<string, FlowerConfig> = {
   daisy: {

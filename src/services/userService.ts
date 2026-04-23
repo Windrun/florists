@@ -79,6 +79,8 @@ export const createUserIfNotExists = async (uid: string) => {
       totalPlants: 0,
       totalHarvests: 0,
       totalHelps: 0,
+      isPremium: false,
+      premiumExpiresAt: null,
     };
     await setDoc(userRef, newUser);
   } else {

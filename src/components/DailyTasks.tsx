@@ -4,7 +4,7 @@ import { getDailyTasks, claimTaskReward } from '../services/taskService';
 import { useToast } from '../App';
 
 interface DailyTasksProps {
-  user: User;
+  user: User | null;
   onRefresh: () => void;
 }
 

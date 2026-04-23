@@ -81,7 +81,6 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       new Notification(title, {
         icon: '🌸',
         badge: '🌸',
-        vibrate: [200, 100, 200],
         tag: 'florists-ready',
         ...options,
       });

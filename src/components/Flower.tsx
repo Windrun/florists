@@ -7,7 +7,7 @@ interface FlowerComponentProps {
   flower: Flower;
   currentUserId: string;
   onHarvest: (flowerId: string) => void;
-  onHelp: (flowerId: string) => void;
+  onHelp: (flowerId: string, ownerId: string) => void;
   onSpeedUp?: (flowerId: string) => void;
   isNew?: boolean;
 }
@@ -118,7 +118,7 @@ const FlowerComponent = ({
           )}
           {!isOwner && !hasBeenHelped && (
             <button
-              onClick={() => onHelp(flower.id)}
+              onClick={() => onHelp(flower.id, flower.ownerId)}
               className="mt-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:scale-105 active:scale-95 shadow-md"
             >
               💧 Помочь
