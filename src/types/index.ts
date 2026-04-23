@@ -64,6 +64,12 @@ export interface User {
   totalDailyRewards: number;
   dailyTasks: DailyTask[];
   lastTaskReset: number;
+  energy: number;
+  maxEnergy: number;
+  lastEnergyRefill: number;
+  totalPlants: number;
+  totalHarvests: number;
+  totalHelps: number;
 }
 
 export interface AuctionListing {

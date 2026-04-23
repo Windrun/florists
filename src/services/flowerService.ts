@@ -1,11 +1,28 @@
 import { db } from '../firebase/config';
-import { doc, updateDoc, arrayUnion, runTransaction } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, runTransaction, increment, getDoc } from 'firebase/firestore';
 import { Flower, FlowerType } from '../types';
 import { isFlowerReady, getFlowerReward as getRewardFromTime } from '../utils/timeUtils';
-import { getFlowerReward } from '../utils/flowerConfigs';
+import { getFlowerReward, ENERGY_CONFIG, calculateEnergy } from '../utils/flowerConfigs';
+import { updateEnergyAfterPlant, updateEnergyAfterHelp } from '../utils/energyUtils';
 
 export const plantFlower = async (userId: string, flowerType: string, potSkin: string = 'default') => {
   const userRef = doc(db, 'users', userId);
+  const userSnap = await getDoc(userRef);
+  
+  if (!userSnap.exists()) {
+    throw new Error('Пользователь не найден');
+  }
+  
+  const userData = userSnap.data();
+  const currentEnergy = userData.energy || ENERGY_CONFIG.maxEnergy;
+  const lastEnergyRefill = userData.lastEnergyRefill || Date.now();
+  
+  const currentEnergyWithRefill = calculateEnergy(currentEnergy, lastEnergyRefill);
+  
+  if (currentEnergyWithRefill < ENERGY_CONFIG.energyPerPlant) {
+    throw new Error('Недостаточно энергии');
+  }
+  
   const newFlower: Flower = {
     id: `${Date.now()}_${Math.random()}`,
     type: flowerType as FlowerType,
@@ -16,8 +33,12 @@ export const plantFlower = async (userId: string, flowerType: string, potSkin: s
     potSkin,
   };
 
+  const newEnergy = currentEnergyWithRefill - ENERGY_CONFIG.energyPerPlant;
+
   await updateDoc(userRef, {
     flowers: arrayUnion(newFlower),
+    energy: newEnergy,
+    lastEnergyRefill: Date.now(),
   });
 
   return newFlower;
@@ -87,8 +108,18 @@ export const helpFlower = async (helperId: string, flowerOwnerId: string, flower
     const helperRef = doc(db, 'users', helperId);
     const helperSnap = await transaction.get(helperRef);
     if (helperSnap.exists()) {
-      const helperCoins = helperSnap.data().coins || 0;
-      transaction.update(helperRef, { coins: helperCoins + 1 });
+      const helperData = helperSnap.data();
+      const helperCurrentEnergy = helperData.energy || ENERGY_CONFIG.maxEnergy;
+      const helperLastRefill = helperData.lastEnergyRefill || Date.now();
+      const helperEnergy = calculateEnergy(helperCurrentEnergy, helperLastRefill);
+      const newHelperEnergy = Math.min(helperEnergy + ENERGY_CONFIG.energyGainPerHelp, ENERGY_CONFIG.maxEnergy);
+      
+      const helperCoins = helperData.coins || 0;
+      transaction.update(helperRef, { 
+        coins: helperCoins + 1,
+        energy: newHelperEnergy,
+        lastEnergyRefill: Date.now(),
+      });
     }
   });
 };

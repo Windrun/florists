@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { Flower } from '../types';
+import { Flower, User } from '../types';
 import FlowerComponent from './Flower';
 import { useNotifications } from '../hooks/useNotifications';
 import { DEFAULT_FLOWERS, PREMIUM_FLOWERS, FLOWER_CONFIGS } from '../utils/flowerConfigs';
+import { ENERGY_CONFIG, calculateEnergy } from '../utils/energyUtils';
 
 const formatGrowthTime = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600);
@@ -14,6 +15,7 @@ const formatGrowthTime = (seconds: number): string => {
 interface GardenProps {
   flowers: Flower[];
   userId: string;
+  userData?: User | null;
   onPlant: (type: string) => void;
   onHarvest: (flowerId: string) => void;
   onHelp: (flowerId: string) => void;
@@ -21,7 +23,7 @@ interface GardenProps {
   onSpeedUp?: (flowerId: string) => void;
 }
 
-const Garden = ({ flowers, userId, onPlant, onHarvest, onHelp, onFlowerReady, onSpeedUp }: GardenProps) => {
+const Garden = ({ flowers, userId, userData, onPlant, onHarvest, onHelp, onFlowerReady, onSpeedUp }: GardenProps) => {
   const [showPlantMenu, setShowPlantMenu] = useState(false);
   const [newFlowerId, setNewFlowerId] = useState<string | null>(null);
   const prevFlowersRef = useRef<string[]>([]);
@@ -30,7 +32,13 @@ const Garden = ({ flowers, userId, onPlant, onHarvest, onHelp, onFlowerReady, on
 
   const activeFlowers = flowers.filter((f) => !f.harvestedAt);
   const harvestedFlowers = flowers.filter((f) => f.harvestedAt);
+  
+  const currentEnergy = userData?.energy ?? ENERGY_CONFIG.maxEnergy;
+  const lastEnergyRefill = userData?.lastEnergyRefill ?? Date.now();
+  const currentEnergyWithRefill = calculateEnergy(currentEnergy, lastEnergyRefill);
+  const canPlantCount = Math.min(currentEnergyWithRefill, ENERGY_CONFIG.maxEnergy);
   const availableSlots = 6 - activeFlowers.length;
+  const canPlant = canPlantCount >= ENERGY_CONFIG.energyPerPlant && availableSlots > 0;
 
   const flowerTypes = [
     ...DEFAULT_FLOWERS,
@@ -98,13 +106,22 @@ const Garden = ({ flowers, userId, onPlant, onHarvest, onHelp, onFlowerReady, on
               🔔 Включить уведомления
             </button>
           )}
-          {availableSlots > 0 && (
+          <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-3 py-2 rounded-lg">
+            <span className="text-lg">⚡</span>
+            <span className="font-medium text-blue-700 dark:text-blue-300">{canPlantCount}/{ENERGY_CONFIG.maxEnergy}</span>
+          </div>
+          {canPlant && (
             <button
               onClick={() => setShowPlantMenu(!showPlantMenu)}
               className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all transform hover:scale-105 active:scale-95 shadow-md"
             >
-              + Посадить ({availableSlots})
+              + Посадить
             </button>
+          )}
+          {!canPlant && (
+            <div className="bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg text-sm text-gray-500">
+              ⚡ Нужно больше энергии
+            </div>
           )}
         </div>
       </div>

@@ -2,6 +2,7 @@ import { db } from '../firebase/config';
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { increment } from 'firebase/firestore';
 import { User, Friend, DailyReward } from '../types';
+import { ENERGY_CONFIG, calculateEnergy } from '../utils/energyUtils';
 
 const DAILY_REWARDS: DailyReward[] = [
   { day: 1, coins: 10 },
@@ -70,6 +71,14 @@ export const createUserIfNotExists = async (uid: string) => {
       dailyStreak: 0,
       lastDailyReward: 0,
       totalDailyRewards: 0,
+      dailyTasks: [],
+      lastTaskReset: 0,
+      energy: ENERGY_CONFIG.maxEnergy,
+      maxEnergy: ENERGY_CONFIG.maxEnergy,
+      lastEnergyRefill: Date.now(),
+      totalPlants: 0,
+      totalHarvests: 0,
+      totalHelps: 0,
     };
     await setDoc(userRef, newUser);
   } else {

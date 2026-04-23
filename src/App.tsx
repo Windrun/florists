@@ -97,10 +97,15 @@ function AppContent() {
 
   const handlePlant = async (flowerType: string) => {
     if (!user?.uid) return;
-    await plantFlower(user.uid, flowerType);
-    await addXp(XP_REWARDS.PLANT_FLOWER);
-    await updateTaskProgress(user.uid, 'plant');
-    await refreshUserData();
+    try {
+      await plantFlower(user.uid, flowerType);
+      await addXp(XP_REWARDS.PLANT_FLOWER);
+      await updateTaskProgress(user.uid, 'plant');
+      await refreshUserData();
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Ошибка';
+      showToast(message, 'error');
+    }
   };
 
   const handleHarvest = async (flowerId: string) => {
@@ -169,6 +174,7 @@ function AppContent() {
                   <Garden
                     flowers={userData?.flowers || []}
                     userId={user?.uid || ''}
+                    userData={userData}
                     onPlant={handlePlant}
                     onHarvest={handleHarvest}
                     onHelp={handleHelp}
